@@ -35,7 +35,10 @@ function M.update()
     error('rm -rf failed: ' .. obj.code .. ': ' .. obj.stderr)
   end
 
+  local total = 0
+  local errors = 0
   for _, rel_path in ipairs(g_paths) do
+    total = total + 1
     obj = vim.system({'rm', '-rf', plugin_root .. '/' .. rel_path}):wait()
     if obj.code ~= 0 then
       error('rm -rf failed: ' .. obj.code .. ': ' .. obj.stderr)
@@ -44,6 +47,7 @@ function M.update()
     obj = vim.system({'arc', 'export', '--to', plugin_root, 'trunk', rel_path}, {cwd = arc_root}):wait()
     if obj.code ~= 0 then
       error('arc export failed: ' .. obj.code .. ': ' .. obj.stderr)
+      errors = errors + 1
     end
   end
 
@@ -51,6 +55,8 @@ function M.update()
   if obj.code ~= 0 then
     error('rm -rf failed: ' .. obj.code .. ': ' .. obj.stderr)
   end
+
+  vim.api.nvim_echo({{total .. ' arc plugins updated, ' .. errors .. ' errors'}}, true, {})
 end
 
 return M

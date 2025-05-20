@@ -56,7 +56,7 @@ function M.update()
     error('rm -rf failed: ' .. obj.code .. ': ' .. obj.stderr)
   end
 
-  vim.api.nvim_echo({{total .. ' arc plugins updated, ' .. errors .. ' errors'}}, true, {})
+  vim.notify({{total .. ' arc plugins updated, ' .. errors .. ' errors'}}, true, {})
 end
 
 return M
